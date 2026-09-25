@@ -42,7 +42,7 @@ func (v *Vector) Set(i int, value int) bool {
 }
 
 func (v *Vector) Push(value int) {
-	v.growIfFull(v.length)
+	v.grow(v.length)
 	v.data[v.length] = value
 	v.length++
 }
@@ -61,7 +61,7 @@ func (v *Vector) Insert(i int, value int) bool {
 	if i > v.length || i < 0 {
 		return false
 	}
-	v.growIfFull(i)
+	v.grow(i)
 	v.data[i] = value
 	v.length++
 	return true
@@ -80,7 +80,7 @@ func (v *Vector) Remove(i int) (int, bool) {
 	return value, true
 }
 
-func (v *Vector) growIfFull(gap int) {
+func (v *Vector) grow(gap int) {
 	if capacity := len(v.data); v.length == capacity {
 		if capacity == 0 {
 			capacity = 1
