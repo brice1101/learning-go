@@ -11,12 +11,20 @@ type Linkedlist struct {
 
 func (l *Linkedlist) PushFront(value int) {
 	n := Node{value, l.head}
+	if l.head == nil {
+		l.tail = &n
+	}
 	l.head = &n
 }
 
 func (l *Linkedlist) PushBack(value int) {
 	n := Node{value, nil}
-	l.tail.next = &n
+	if l.head == nil {
+		l.head = &n
+	} else {
+		l.tail.next = &n
+	}
+	l.tail = &n
 }
 
 func (l *Linkedlist) PopFront() (int, bool) {
@@ -25,10 +33,16 @@ func (l *Linkedlist) PopFront() (int, bool) {
 	}
 	value := l.head.value
 	l.head = l.head.next
+	if l.head == nil {
+		l.tail = nil
+	}
 	return value, true
 }
 
 func (l *Linkedlist) Find(value int) (int, bool) {
+	if l.head == nil {
+		return 0, false
+	}
 	n := l.head
 	i := 0
 	for n.next != nil {
@@ -45,29 +59,33 @@ func (l *Linkedlist) Find(value int) (int, bool) {
 }
 
 func (l *Linkedlist) Remove(value int) bool {
+	if l.head == nil {
+		return false
+	}
 	// case first item
 	n := l.head
 	if n.value == value {
 		l.head = l.head.next
+		if l.head == nil {
+			l.tail = nil
+		}
 		return true
 	}
 
 	// case middle
-	prev := *n
-	for n.next != nil {
-		if n.value == value {
+	var prev *Node
+	for true {
+		prev = n
+		n = n.next
+		if n == nil {
+			return false
+		} else if n.value == value {
+			if n.next == nil {
+				l.tail = prev
+			}
 			prev.next = n.next
 			return true
 		}
-		prev = *n
-		n = n.next
-
-	}
-
-	// case end
-	if n.value == value {
-		prev.next = nil
-		return true
 	}
 	return false
 }
@@ -86,13 +104,16 @@ func (l *Linkedlist) Len() int {
 }
 
 func (l *Linkedlist) Reverse() {
-	n := l.head
-	flipPointer(n, n.next)
-}
-
-func flipPointer(nodeA *Node, nodeB *Node) {
-	if nodeB.next != nil {
-		flipPointer(nodeB, nodeB.next)
+	curr := l.head
+	var prev *Node = nil
+	var next *Node = nil
+	for curr != nil {
+		next = curr.next
+		curr.next = prev
+		prev = curr
+		curr = next
 	}
-	nodeB.next = nodeA
+	l.tail = l.head
+	l.head = prev
+
 }

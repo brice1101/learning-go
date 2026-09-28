@@ -35,15 +35,21 @@ func newTestNode(t *testing.T, values []int) *Node {
 }
 
 func assertValues(t *testing.T, l Linkedlist, want []int) {
-	var got []int
-	n := l.head
-	for n.next != nil {
+	if l.head == nil {
+		if want != nil {
+			t.Errorf("Contents null, want %v", want)
+		}
+	} else {
+		var got []int
+		n := l.head
+		for n.next != nil {
+			got = append(got, n.value)
+			n = n.next
+		}
 		got = append(got, n.value)
-		n = n.next
-	}
-	got = append(got, n.value)
-	if !slices.Equal(got, want) {
-		t.Errorf("Contents %v, want %v", got, want)
+		if !slices.Equal(got, want) {
+			t.Errorf("Contents %v, want %v", got, want)
+		}
 	}
 }
 
@@ -125,7 +131,7 @@ func TestLinkedlist_Reverse(t *testing.T) {
 	}{
 		{name: "normal", values: []int{1, 2, 3}, want: []int{3, 2, 1}},
 		{name: "single element", values: []int{1}, want: []int{1}},
-		{name: "empty", values: []int{}, want: []int{}},
+		{name: "empty", values: []int{}, want: nil},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
