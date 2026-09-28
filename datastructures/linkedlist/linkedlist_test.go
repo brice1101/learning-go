@@ -29,6 +29,7 @@ func newTestNode(t *testing.T, values []int) *Node {
 }
 
 func assertValues(t *testing.T, l Linkedlist, want []int) {
+	t.Helper()
 	if l.head == nil {
 		if want != nil {
 			t.Errorf("Contents null, want %v", want)
@@ -38,6 +39,11 @@ func assertValues(t *testing.T, l Linkedlist, want []int) {
 		n := l.head
 		for n != nil {
 			got = append(got, n.value)
+			if n.next == nil { // check final value is tail
+				if n != l.tail {
+					t.Errorf("Final node is %v, tail is %v", n, l.tail)
+				}
+			}
 			n = n.next
 		}
 		if !slices.Equal(got, want) {
@@ -53,10 +59,21 @@ func TestNewListHasLengthZero(t *testing.T) {
 	}
 }
 
+func TestFindOnEmpty(t *testing.T) {
+	l := newTestLinkedlist(t, []int{})
+	_, ok := l.Find(1)
+	if ok {
+		t.Errorf("Find() on empty list expects false, got %t", ok)
+	}
+}
+
 func TestPushPopRoundTrip(t *testing.T) {
 	l := newTestLinkedlist(t, []int{1})
 	l.PushFront(2)
-	l.PopFront()
+	value, ok := l.PopFront()
+	if value != 2 || !ok {
+		t.Errorf("Pop() expected (2, true), got (%d, %t)", value, ok)
+	}
 	assertValues(t, l, []int{1})
 }
 
