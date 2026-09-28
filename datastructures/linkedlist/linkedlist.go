@@ -59,28 +59,20 @@ func (l *Linkedlist) Remove(value int) bool {
 	if l.head == nil {
 		return false
 	}
-	// case first item
-	n := l.head
-	if n.value == value {
-		l.PopFront()
-		return true
-	}
-
-	// case middle
-	var prev *Node
-	for {
-		prev = n
-		n = n.next
-		if n == nil {
-			return false
-		} else if n.value == value {
-			if n.next == nil {
+	link := &l.head
+	var prev *Node = nil
+	for *link != nil {
+		if (*link).value == value {
+			*link = (*link).next
+			if *link == nil {
 				l.tail = prev
 			}
-			prev.next = n.next
 			return true
 		}
+		prev = *link
+		link = &(*link).next
 	}
+	return false
 }
 
 func (l *Linkedlist) Len() int {
