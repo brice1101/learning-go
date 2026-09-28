@@ -83,12 +83,12 @@ func TestPushBackOrder(t *testing.T) {
 	assertValues(t, l, []int{1, 2, 3, 4})
 }
 
-func PopFrontOnEmptyErrors(t *testing.T) {
+func TestPopFrontOnEmptyErrors(t *testing.T) {
 	l := newTestLinkedlist(t, []int{})
 	if _, ok := l.PopFront(); ok {
 		t.Errorf("Pop on empty got %t, want false", ok)
 	}
-	assertValues(t, l, []int{})
+	assertValues(t, l, nil)
 }
 
 func TestLinkedlist_Remove(t *testing.T) {
