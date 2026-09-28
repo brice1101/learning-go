@@ -45,15 +45,12 @@ func (l *Linkedlist) Find(value int) (int, bool) {
 	}
 	n := l.head
 	i := 0
-	for n.next != nil {
+	for n != nil {
 		if n.value == value {
 			return i, true
 		}
 		n = n.next
 		i++
-	}
-	if n.value == value {
-		return i, true
 	}
 	return 0, false
 }
@@ -65,16 +62,13 @@ func (l *Linkedlist) Remove(value int) bool {
 	// case first item
 	n := l.head
 	if n.value == value {
-		l.head = l.head.next
-		if l.head == nil {
-			l.tail = nil
-		}
+		l.PopFront()
 		return true
 	}
 
 	// case middle
 	var prev *Node
-	for true {
+	for {
 		prev = n
 		n = n.next
 		if n == nil {
@@ -87,7 +81,6 @@ func (l *Linkedlist) Remove(value int) bool {
 			return true
 		}
 	}
-	return false
 }
 
 func (l *Linkedlist) Len() int {
@@ -95,8 +88,8 @@ func (l *Linkedlist) Len() int {
 	if n == nil {
 		return 0
 	}
-	counter := 1
-	for n.next != nil {
+	counter := 0
+	for n != nil {
 		n = n.next
 		counter++
 	}

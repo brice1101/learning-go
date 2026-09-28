@@ -8,17 +8,15 @@ import (
 func newTestLinkedlist(t *testing.T, values []int) Linkedlist {
 	t.Helper()
 	l := Linkedlist{newTestNode(t, values), nil}
-	if l.head != nil {
-		if l.head.next == nil {
-			l.tail = l.head
-		} else {
-			n := l.head
-			for n.next != nil {
-				n = n.next
-			}
-			l.tail = n
-		}
+	if l.head == nil {
+		l.tail = nil
+		return l
 	}
+	n := l.head
+	for n.next != nil {
+		n = n.next
+	}
+	l.tail = n
 	return l
 }
 
@@ -26,10 +24,6 @@ func newTestNode(t *testing.T, values []int) *Node {
 	t.Helper()
 	if len(values) == 0 {
 		return nil
-	}
-	if len(values) == 1 {
-		return &Node{values[0], nil}
-
 	}
 	return &Node{values[0], newTestNode(t, values[1:])}
 }
@@ -42,11 +36,10 @@ func assertValues(t *testing.T, l Linkedlist, want []int) {
 	} else {
 		var got []int
 		n := l.head
-		for n.next != nil {
+		for n != nil {
 			got = append(got, n.value)
 			n = n.next
 		}
-		got = append(got, n.value)
 		if !slices.Equal(got, want) {
 			t.Errorf("Contents %v, want %v", got, want)
 		}
