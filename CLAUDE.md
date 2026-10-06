@@ -45,7 +45,7 @@ At the end of every session, add a dated entry to `notes/learning-log.md`.
 
 ## Current focus
 
-> **Now:** Phase 1: hash map (next milestone structure)
+> **Now:** Phase 1: hash map (`notes/02-hash-map.md`), starting with theory + paper exercise
 > **Last finished:** dynamic array + singly linked list (`notes/01-vector-and-linked-list.md`)
 > **Blocked on / questions:** _
 
