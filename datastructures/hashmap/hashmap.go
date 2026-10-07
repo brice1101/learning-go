@@ -2,7 +2,8 @@ package hashmap
 
 type HashMap struct {
 	buckets      []*entry
-	hashFunction func()
+	hashFunction func(string) uint64
+	length       int
 }
 
 type entry struct {
@@ -11,7 +12,7 @@ type entry struct {
 	next  *entry
 }
 
-func fnv_1a(key string) uint64 {
+func fnv1a(key string) uint64 {
 	var hash uint64 = 14695981039346656037
 	for _, c := range []byte(key) {
 		hash = hash ^ uint64(c)
@@ -21,5 +22,5 @@ func fnv_1a(key string) uint64 {
 }
 
 func New() *HashMap {
-	return &HashMap{buckets: make([]*entry, 8)}
+	return &HashMap{buckets: make([]*entry, 8), hashFunction: fnv1a, length: 0}
 }
